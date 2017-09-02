@@ -1,0 +1,10 @@
+# Routes Config
+#
+# This file defines all application routes (Higher priority routes first)
+#
+
+module:testrunner
+# module:jobs
+
+GET     /                                       Deploys.List
+GET     /deploys                                Deploys.List
