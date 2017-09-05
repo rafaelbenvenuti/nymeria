@@ -18,16 +18,20 @@ func (_ tDeploys) Create(
 }
 
 func (_ tDeploys) Show(
+		id int,
 		) string {
 	args := make(map[string]string)
 	
+	revel.Unbind(args, "id", id)
 	return revel.MainRouter.Reverse("Deploys.Show", args).URL
 }
 
 func (_ tDeploys) Delete(
+		id int,
 		) string {
 	args := make(map[string]string)
 	
+	revel.Unbind(args, "id", id)
 	return revel.MainRouter.Reverse("Deploys.Delete", args).URL
 }
 

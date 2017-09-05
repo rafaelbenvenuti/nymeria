@@ -44,6 +44,7 @@ func main() {
 			&revel.MethodType{
 				Name: "Show",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
@@ -51,6 +52,7 @@ func main() {
 			&revel.MethodType{
 				Name: "Delete",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},

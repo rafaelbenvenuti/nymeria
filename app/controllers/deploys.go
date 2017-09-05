@@ -46,15 +46,95 @@ func (c Deploys) Create(deploy *models.Deploy) revel.Result {
 	return c.RenderJSON(response)
 }
 
-func (c Deploys) Show() revel.Result {
-	return c.Todo()
+func (c Deploys) Show(id int) revel.Result {
+	// Prepare an object to return as the response in the end.
+	response := make(map[string]interface{})
+
+	// Try to retrieve the object in the database.
+	var deploy models.Deploy
+	op := app.Database.First(&deploy, id)
+	if op.Error != nil {
+		// Return a 404 if the record is not found.
+		if op.RecordNotFound() {
+			c.Response.Status = 404
+			response["meta"] = Meta{ID: 400, Message: "record not found."}
+			response["data"] = nil
+			return c.RenderJSON(response)
+
+			// Return an error if data can't be accessed in the database.
+		} else {
+			c.Response.Status = 500
+			response["meta"] = Meta{ID: 201, Message: "unable to retrieve data internally."}
+			response["data"] = nil
+			return c.RenderJSON(response)
+		}
+
+	}
+
+	// Return 200 if the deploy was successfully retrieved.
+	c.Response.Status = 200
+	response["meta"] = Meta{ID: 20, Message: "deploy retrieved successfully."}
+	response["data"] = deploy
+	return c.RenderJSON(response)
 }
 
-func (c Deploys) Delete() revel.Result {
-	return c.Todo()
+func (c Deploys) Delete(id int) revel.Result {
+	// Prepare an object to return as the response in the end.
+	response := make(map[string]interface{})
+
+	// Try to retrieve the object in the database.
+	var deploy models.Deploy
+	op := app.Database.First(&deploy, id)
+	if op.Error != nil {
+		// Return a 404 if the record is not found.
+		if op.RecordNotFound() {
+			c.Response.Status = 404
+			response["meta"] = Meta{ID: 400, Message: "record not found."}
+			response["data"] = nil
+			return c.RenderJSON(response)
+
+			// Return an error if data can't be accessed in the database.
+		} else {
+			c.Response.Status = 500
+			response["meta"] = Meta{ID: 201, Message: "unable to retrieve data internally."}
+			response["data"] = nil
+			return c.RenderJSON(response)
+		}
+	}
+
+	// Record has been found, so we must remove the record.
+	op = app.Database.Delete(&deploy)
+	if op.Error != nil {
+		c.Response.Status = 500
+		response["meta"] = Meta{ID: 202, Message: "unable to remove data internally."}
+		response["data"] = deploy
+		return c.RenderJSON(response)
+	}
+
+	// Return 200 if the deploy was successfully retrieved.
+	c.Response.Status = 200
+	response["meta"] = Meta{ID: 21, Message: "deploy removed successfully."}
+	response["data"] = deploy
+	return c.RenderJSON(response)
 }
 
 func (c Deploys) List() revel.Result {
-	results := app.Database.Find(models.Deploy{})
-	return c.RenderJSON(results)
+	// Prepare an object to return as the response in the end.
+	response := make(map[string]interface{})
+
+	// Retrieve all deploys from database.
+	deploys := []models.Deploy{}
+	op := app.Database.Find(&deploys)
+	if op.Error != nil {
+		c.Response.Status = 500
+		response["meta"] = Meta{ID: 201, Message: "unable to retrieve data internally."}
+		response["data"] = nil
+		return c.RenderJSON(response)
+	}
+
+	// Return 200 code and all deploy data.
+	c.Response.Status = 200
+	response["meta"] = Meta{ID: 30, Message: "all data successfully retrieved."}
+	response["data"] = deploys
+	return c.RenderJSON(response)
 }
