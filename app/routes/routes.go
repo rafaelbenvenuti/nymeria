@@ -8,6 +8,29 @@ type tDeploys struct {}
 var Deploys tDeploys
 
 
+func (_ tDeploys) Create(
+		deploy interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "deploy", deploy)
+	return revel.MainRouter.Reverse("Deploys.Create", args).URL
+}
+
+func (_ tDeploys) Show(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Deploys.Show", args).URL
+}
+
+func (_ tDeploys) Delete(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Deploys.Delete", args).URL
+}
+
 func (_ tDeploys) List(
 		) string {
 	args := make(map[string]string)

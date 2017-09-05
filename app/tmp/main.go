@@ -8,6 +8,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/rafaelbenvenuti/nymeria/app"
 	controllers "github.com/rafaelbenvenuti/nymeria/app/controllers"
+	models "github.com/rafaelbenvenuti/nymeria/app/models"
 	tests "github.com/rafaelbenvenuti/nymeria/tests"
 	controllers0 "github.com/revel/modules/static/app/controllers"
 	_ "github.com/revel/modules/testrunner/app"
@@ -32,6 +33,28 @@ func main() {
 	
 	revel.RegisterController((*controllers.Deploys)(nil),
 		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Create",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "deploy", Type: reflect.TypeOf((**models.Deploy)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Show",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Delete",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
 			&revel.MethodType{
 				Name: "List",
 				Args: []*revel.MethodArg{ 
@@ -108,6 +131,13 @@ func main() {
 		})
 	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
+		"github.com/rafaelbenvenuti/nymeria/app/models.(*Deploy).Validate": { 
+			21: "deploy.Component",
+			22: "deploy.Version",
+			23: "deploy.Accountable",
+			24: "deploy.Status",
+			25: "deploy.Duration",
+		},
 	}
 	testing.TestSuites = []interface{}{ 
 		(*tests.AppTest)(nil),

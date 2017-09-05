@@ -6,5 +6,7 @@
 module:testrunner
 # module:jobs
 
-GET     /                                       Deploys.List
 GET     /deploys                                Deploys.List
+POST    /deploys                                Deploys.Create
+GET     /deploys/:id                            Deploys.Show
+DELETE  /deploys/:id                            Deploys.Delete
