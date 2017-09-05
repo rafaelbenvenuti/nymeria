@@ -1,44 +1,51 @@
 # Nymeria
 
-### Description
+## Description
 
 Nymeria is an automatic and reliable deployment measure system, providing basic mechanisms for small teams to analyze their deployment pipeline data.
 
-### Origins
+## Origins
 
-Nymeria is named after Arya Stark's direwolf in Game of Thrones.
+Obvously, Nymeria is named after Arya Stark's direwolf in Game of Thrones. Although Nymeria has left Arya under unfortunate circunstances, this Nymeria is differente, and it will prove to be a valuable asset in environments where other references to GoT are necessary. Also, Nymeria is trustworthy and a great companion to your deployments.
 
-## How to develop
+## Technologies
 
-Nymeria is developed using the Revel web framework. Revel is based on the Go Programming Language. Also, the Gorm ORM is used to store the application data.
-
-You can find further instructions on how to install and configure the Go Development Environment in xxxxxx. It's necessary to install the revel cli, by issuing the following command:
-* go get github.com/revel/revel
-
-In order to develop Nymeria locally, the following dependencies are necessary:
-* GCC
-* Stdlib
+The following technologies powers Nymeria:
+* Go Programming Language
+* Gorm Object Relationship Model
+* Revel Web Framework
+* Docker Containers
 * Sqlite3
 
-##### Nymeria uses the Go Dep package management ( link ), so all dependecies are included in the source code. If you need to upgrade any of them, just run:
-* dep ensure -update dependecy_name.
+### Development
 
-##### In order to run Nymeria locally, you can use:
-* revel run github.com/rafaelbenvenuti/Nymeria
+To help develop Nymeria, the following dependencies must be locally configured:
+* Go Language Environment: [Go Language Install](https://golang.org/doc/install)
+* Gorm ORM [Gorm ORM](http://jinzhu.me/gorm)
+* Revel Web Framework [Revel Web Framework](https://https://revel.github.io)
+* Sqlite3 [Sqlite3 Database](https://www.sqlite.org)
+* Docker [Docker Community Edition Documentation](https://docs.docker.com/engine/installation).
 
-Nymeria will be listening on all interfaces at port 9000.
+In order to facilitate Nymeria's development, a Builder's Dockerfile is included in this repository, so if don't want to manually configure all those requirements, you may just simply execute `docker build -f Build-Dockerfile -t nymeria-dev .` inside this repository directory to generate a Docker Container Image with all the dependencies included, with vim batteries.
 
-## How to prepare Nymeria for deployment
+This docker container image shall be used to develop Nymeria in the following way:
+1. Start the development docker container with `docker run --net host --rm -ti nymeria-dev`
+2. Edit Nymeria code with Vim as you see fit.
+3. Start Nymeria using `revel run github.com/rafaelbenvenuti/nymeria`
+4. Wait almost 30 seconds for Revel and Database setup.
+5. Enjoy
 
-Nymeria's build process for deployment is based on Docker containers, so you'll need a Docker runtime engine that supports multi-stage builds. In order to install Docker, you may follow the instructions provided at [Docker Community Edition Documentation]().
+### Deployment
+Nymeria's Default Dockerfile will create a Docker container image based on Alpine that is properly built for deployment.
+This Dockerfile will use multi-stage builds to ensure that the final container image is small and self-contained, using around 32MB of disk space.
+Althought Nymeria only supports sqlite3 at this moment, changing the database driver is very easy and all this careful thought about the final artifact generated for deployment will be important when deploying on orchestration systems like Swarm, Mesos and Kubernetes.
 
-To build the Docker image, run the following command: Docker build . -t <tag>
+To run the deployment version, it is required to build nymeria using the default Dockerfile with `docker build -f Dockerfile -t nymeria .`.
+After that, a new Docker image will be available for you to push into any Docker compatible repository. To run this version, you can use almost the same command for development, just need to change the image tag, like the following: `docker run --name nymeria --net host -ti nymeria`.
+The above version of the command creates a container with the name `nymeria`, which you can manage with docker's start, stop and rm commands.
 
-Nymeria's Dockerfile will create a new Docker container image that is
+### Interacting
 
-## How to deploy Nymeria
-
-You may run docker run
 
 ## Code Layout
 
@@ -52,6 +59,15 @@ The directory structure of a generated Revel application:
     app/              App sources
         init.go       Interceptor registration
         controllers/  App controllers go here
+                deploys.go  Deploys controller
         models/       Database models directory
-        views/        Templates directory
+                deploy.go       Deploy model
+        views/        Templates directory - Not used for APIs
     tests/            Test suites
+
+## Todo
+* Develop unit tests
+* Monitoring with Prometheus
+* Develop a systemd docker wrapper
+* Configure a time series database backend
+* Models for entities like accountable, components, status, etc...
