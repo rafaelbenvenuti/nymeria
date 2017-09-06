@@ -51,20 +51,23 @@ Nymeria manage deploy data with the following structure:
     "component": "nymeria", 
     "version": "0.0.1", 
     "accountable": "rafaelbenvenuti", 
-    "status": "fail", 
+    "status": "success",
     "duration": 232 
 }'
 
 ```
 
 To create a new deploys:
-`curl -H 'Content-Type: application/json' -X POST -d '{ "component": "aaa", "version": "1", "accountable": "myself", "status": "ok", "duration": 300 }' http://localhost:9000/deploys`
+`curl -H 'Content-Type: application/json' -X POST -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "success", "duration": 300 }' http://localhost:9000/deploys`
 
 To list all deploys:
 `curl -H 'Content-Type: application/json' -X GET http://localhost:9000/deploys`
 
-To shot a deploy:
+To show a deploy:
 `curl -H 'Content-Type: application/json' -X GET http://localhost:9000/deploys/1`
+
+To update a deploy:
+`curl -H 'Content-Type: application/json' -X PUT -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "failed", "duration": 300 }' http://localhost:9000/deploys/1`
 
 To delete a deploy:
 `curl -H 'Content-Type: application/json' -X DELETE http://localhost:9000/deploys`

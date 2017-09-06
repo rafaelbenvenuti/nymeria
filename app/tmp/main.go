@@ -31,12 +31,31 @@ func main() {
 	revel.Init(*runMode, *importPath, *srcPath)
 	revel.INFO.Println("Running revel server")
 	
+	revel.RegisterController((*controllers.App)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Index",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
 	revel.RegisterController((*controllers.Deploys)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Create",
 				Args: []*revel.MethodArg{ 
 					&revel.MethodArg{Name: "deploy", Type: reflect.TypeOf((**models.Deploy)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "List",
+				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
 				},
@@ -50,7 +69,7 @@ func main() {
 				},
 			},
 			&revel.MethodType{
-				Name: "Delete",
+				Name: "Update",
 				Args: []*revel.MethodArg{ 
 					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
@@ -58,8 +77,9 @@ func main() {
 				},
 			},
 			&revel.MethodType{
-				Name: "List",
+				Name: "Delete",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
@@ -134,11 +154,16 @@ func main() {
 	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
 		"github.com/rafaelbenvenuti/nymeria/app/models.(*Deploy).Validate": { 
-			21: "deploy.Component",
-			22: "deploy.Version",
-			23: "deploy.Accountable",
-			24: "deploy.Status",
-			25: "deploy.Duration",
+			22: "deploy.Component",
+			23: "deploy.Component",
+			24: "deploy.Component",
+			25: "deploy.Version",
+			26: "deploy.Accountable",
+			27: "deploy.Accountable",
+			28: "deploy.Accountable",
+			29: "deploy.Status",
+			30: "deploy.Status",
+			31: "deploy.Duration",
 		},
 	}
 	testing.TestSuites = []interface{}{ 
