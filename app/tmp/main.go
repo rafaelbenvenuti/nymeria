@@ -8,7 +8,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/rafaelbenvenuti/nymeria/app"
 	controllers "github.com/rafaelbenvenuti/nymeria/app/controllers"
-	models "github.com/rafaelbenvenuti/nymeria/app/models"
 	tests "github.com/rafaelbenvenuti/nymeria/tests"
 	controllers0 "github.com/revel/modules/static/app/controllers"
 	_ "github.com/revel/modules/testrunner/app"
@@ -31,24 +30,11 @@ func main() {
 	revel.Init(*runMode, *importPath, *srcPath)
 	revel.INFO.Println("Running revel server")
 	
-	revel.RegisterController((*controllers.App)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Index",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			
-		})
-	
 	revel.RegisterController((*controllers.Deploys)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Create",
 				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "deploy", Type: reflect.TypeOf((**models.Deploy)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
@@ -69,19 +55,26 @@ func main() {
 				},
 			},
 			&revel.MethodType{
-				Name: "Update",
+				Name: "Delete",
 				Args: []*revel.MethodArg{ 
 					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
 			},
+			
+		})
+	
+	revel.RegisterController((*controllers.Dashboard)(nil),
+		[]*revel.MethodType{
 			&revel.MethodType{
-				Name: "Delete",
+				Name: "Show",
 				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "id", Type: reflect.TypeOf((*int)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
+					30: []string{ 
+						"deploys",
+					},
 				},
 			},
 			
@@ -154,16 +147,12 @@ func main() {
 	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
 		"github.com/rafaelbenvenuti/nymeria/app/models.(*Deploy).Validate": { 
-			22: "deploy.Component",
-			23: "deploy.Component",
-			24: "deploy.Component",
-			25: "deploy.Version",
-			26: "deploy.Accountable",
-			27: "deploy.Accountable",
-			28: "deploy.Accountable",
-			29: "deploy.Status",
-			30: "deploy.Status",
-			31: "deploy.Duration",
+			16: "deploy.Component",
+			17: "deploy.Version",
+			18: "deploy.Accountable",
+		},
+		"github.com/rafaelbenvenuti/nymeria/app/models.(*Status).Validate": { 
+			17: "status.Status",
 		},
 	}
 	testing.TestSuites = []interface{}{ 

@@ -1,6 +1,8 @@
 package app
 
 import (
+	"time"
+
 	"github.com/revel/revel"
 	"github.com/jinzhu/gorm"
 	"github.com/rafaelbenvenuti/nymeria/app/models"
@@ -49,7 +51,7 @@ func InitDatabase() {
 	var err error
 
 	driver := revel.Config.StringDefault("db.driver", "sqlite3")
-	uri := revel.Config.StringDefault("db.uri", "development.db")
+	uri := revel.BasePath + "/" + revel.Config.StringDefault("db.uri", "test.db" )
 
 	revel.INFO.Println("Starting database connection...")
 
@@ -61,5 +63,28 @@ func InitDatabase() {
 	revel.INFO.Println("Database connected!")
 
 	Database.LogMode(true)
-	Database.AutoMigrate(&models.Deploy{})
+	Database.AutoMigrate(&models.Deploy{}, &models.Status{})
+
+	seeds := []models.Deploy{
+	  models.Deploy {
+			Accountable: "dev-team-1",
+		  Component: "frontend",
+			Version: "v1.0.0",
+			Statuses: []models.Status {
+			  models.Status {
+			    Status: "starting",
+				  Date: time.Date(2017, time.September, 1, 12, 0, 0, 0, time.UTC),
+			  },
+			  models.Status {
+			    Status: "ending",
+				  Date: time.Date(2017, time.September, 1, 13, 0, 0, 0, time.UTC),
+			  },
+		  },
+	  },
+	}
+
+  for _, seed := range seeds {
+	  Database.Create(&seed)
+	}
+
 }

@@ -4,28 +4,14 @@ package routes
 import "github.com/revel/revel"
 
 
-type tApp struct {}
-var App tApp
-
-
-func (_ tApp) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("App.Index", args).URL
-}
-
-
 type tDeploys struct {}
 var Deploys tDeploys
 
 
 func (_ tDeploys) Create(
-		deploy interface{},
 		) string {
 	args := make(map[string]string)
 	
-	revel.Unbind(args, "deploy", deploy)
 	return revel.MainRouter.Reverse("Deploys.Create", args).URL
 }
 
@@ -45,15 +31,6 @@ func (_ tDeploys) Show(
 	return revel.MainRouter.Reverse("Deploys.Show", args).URL
 }
 
-func (_ tDeploys) Update(
-		id int,
-		) string {
-	args := make(map[string]string)
-	
-	revel.Unbind(args, "id", id)
-	return revel.MainRouter.Reverse("Deploys.Update", args).URL
-}
-
 func (_ tDeploys) Delete(
 		id int,
 		) string {
@@ -61,6 +38,18 @@ func (_ tDeploys) Delete(
 	
 	revel.Unbind(args, "id", id)
 	return revel.MainRouter.Reverse("Deploys.Delete", args).URL
+}
+
+
+type tDashboard struct {}
+var Dashboard tDashboard
+
+
+func (_ tDashboard) Show(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Dashboard.Show", args).URL
 }
 
 
