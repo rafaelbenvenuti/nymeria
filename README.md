@@ -8,6 +8,11 @@ Nymeria is an automatic and reliable deployment measure system, providing basic 
 
 Obviously, Nymeria is named after Arya Stark's direwolf in Game of Thrones. Although Nymeria has left Arya under unfortunate circunstances, this Nymeria is different, and it will prove itself as a valuable asset in environments where other references from GoT are necessary. Also, Nymeria is trustworthy and a great companion to your deployments.
 
+
+## Screenshots
+
+![Nymeria Dashboard](/examples/dashboard.png?raw=true "Nymeria Dashboard")
+
 ## Technologies
 
 The following technologies powers Nymeria:
@@ -16,6 +21,7 @@ The following technologies powers Nymeria:
 * Revel Web Framework
 * Docker Containers
 * Sqlite3
+* Highcharts
 
 ## Development
 
@@ -37,7 +43,8 @@ This docker container image shall be used to develop Nymeria in the following wa
 
 ## Deployment
 Nymeria's Default Dockerfile will create a Docker container image based on Alpine that is properly built for deployment.
-This Dockerfile will use multi-stage builds to ensure that the final container image is small and self-contained, using around 32MB of disk space.
+This Dockerfile will use multi-stage builds to ensure that the final container image is small and self-contained, using around 32MB of disk space. 
+
 Althought Nymeria only supports sqlite3 at this moment, changing the database driver is very easy and all this careful thought about the final artifact generated for deployment will be important when deploying on orchestration systems like Swarm, Mesos and Kubernetes.
 
 To run the deployment version, it is required to build nymeria using the default Dockerfile with `docker build -f Dockerfile -t nymeria .`.
@@ -56,7 +63,7 @@ Nymeria manage deploy data with the following structure:
 
 ```
 
-To create a new deploys:
+To create a new deploy:
 `curl -H 'Content-Type: application/json' -X POST -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "starting" }' http://localhost:9000/deploys`
 
 To list all deploys:
@@ -64,9 +71,6 @@ To list all deploys:
 
 To show a deploy:
 `curl -H 'Content-Type: application/json' -X GET http://localhost:9000/deploys/1`
-
-To replace a deploy:
-`curl -H 'Content-Type: application/json' -X PUT -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "building" }' http://localhost:9000/deploys/1`
 
 To delete a deploy:
 `curl -H 'Content-Type: application/json' -X DELETE http://localhost:9000/deploys/1`
