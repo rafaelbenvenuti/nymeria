@@ -85,10 +85,6 @@ func SeedDatabase() {
 			Version:     "v1.0.0",
 			Statuses: []models.Status{
 				models.Status{
-					Status: "start",
-					Date:   time.Date(2017, time.September, 1, 12, 0, 0, 0, time.Local),
-				},
-				models.Status{
 					Status: "build",
 					Date:   time.Date(2017, time.September, 1, 12, 5, 0, 0, time.Local),
 				},
@@ -111,10 +107,6 @@ func SeedDatabase() {
 			Component:   "frontend",
 			Version:     "v1.0.1",
 			Statuses: []models.Status{
-				models.Status{
-					Status: "start",
-					Date:   time.Date(2017, time.September, 1, 18, 0, 0, 0, time.Local),
-				},
 				models.Status{
 					Status: "build",
 					Date:   time.Date(2017, time.September, 1, 18, 5, 0, 0, time.Local),
@@ -139,10 +131,6 @@ func SeedDatabase() {
 			Version:     "v1.0.2",
 			Statuses: []models.Status{
 				models.Status{
-					Status: "start",
-					Date:   time.Date(2017, time.September, 2, 9, 0, 0, 0, time.Local),
-				},
-				models.Status{
 					Status: "build",
 					Date:   time.Date(2017, time.September, 2, 9, 5, 0, 0, time.Local),
 				},
@@ -166,10 +154,6 @@ func SeedDatabase() {
 			Version:     "v1.0.3",
 			Statuses: []models.Status{
 				models.Status{
-					Status: "start",
-					Date:   time.Date(2017, time.September, 2, 13, 0, 0, 0, time.Local),
-				},
-				models.Status{
 					Status: "build",
 					Date:   time.Date(2017, time.September, 2, 13, 5, 0, 0, time.Local),
 				},
@@ -184,6 +168,190 @@ func SeedDatabase() {
 				models.Status{
 					Status: "end",
 					Date:   time.Date(2017, time.September, 2, 14, 30, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-2",
+			Component:   "backend",
+			Version:     "v2.3.0",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 1, 12, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 1, 12, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 1, 12, 30, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 1, 13, 0, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-2",
+			Component:   "backend",
+			Version:     "v2.3.1",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 1, 18, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 1, 18, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 1, 18, 45, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 1, 19, 10, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-2",
+			Component:   "backend",
+			Version:     "v2.3.2",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 2, 9, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 2, 9, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 2, 9, 50, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 2, 10, 55, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-2",
+			Component:   "backend",
+			Version:     "v2.3.3",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 2, 13, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 2, 13, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 2, 13, 45, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 2, 14, 50, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-3",
+			Component:   "cache",
+			Version:     "v.1.20.0",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 1, 12, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 1, 12, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 1, 12, 30, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 1, 13, 0, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-3",
+			Component:   "cache",
+			Version:     "v.1.20.1",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 1, 18, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 1, 18, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 1, 18, 45, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 1, 19, 10, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-3",
+			Component:   "cache",
+			Version:     "v.1.20.2",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 2, 9, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 2, 9, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 2, 9, 50, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 2, 10, 40, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-3",
+			Component:   "cache",
+			Version:     "v.1.20.3",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 2, 13, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 2, 13, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 2, 13, 45, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 2, 14, 10, 0, 0, time.Local),
 				},
 			},
 		},

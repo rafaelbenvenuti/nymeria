@@ -1,17 +1,17 @@
 package controllers
 
 import (
+	"time"
 	"github.com/rafaelbenvenuti/nymeria/app"
 	"github.com/rafaelbenvenuti/nymeria/app/models"
 	"github.com/revel/revel"
-	"time"
 )
 
-// Use this struct for dashboard elements.
-type DataElement struct {
-	Deploy    models.Deploy
-	Durations map[string]time.Duration
-	Total     time.Duration
+// Use this struct for deploy elements.
+type DeployElement struct {
+	Deploy         models.Deploy
+	Durations      map[string]int64
+	DurationsTotal int64
 }
 
 // Define the Dashboard Controller
@@ -32,25 +32,29 @@ func (c Dashboard) Show() revel.Result {
 		return c.RenderText("Nymeria had a fatal error. Please contact the administrator.")
 	}
 
-	// Create map that contains durations for all Statuses for each Deploy.
-	dashboardData := []DataElement{}
+	// Genereate Data for all Deploys.
+	deployData := []DeployElement{}
 	for _, deploy := range deploys {
 		if len(deploy.Statuses) > 1 {
-			durations := make(map[string]time.Duration)
+			durations := make(map[string]int64)
 			previousStatus := deploy.Statuses[0]
 			for _, currentStatus := range deploy.Statuses[1:] {
-				durations[currentStatus.Status] = currentStatus.Date.Sub(previousStatus.Date)
+				durations[previousStatus.Status] = currentStatus.Date.Sub(previousStatus.Date).Nanoseconds()/int64(time.Millisecond)
 				previousStatus = currentStatus
 			}
-			dashboardData = append(dashboardData, DataElement{
-				Deploy:    deploy,
-				Durations: durations,
-				Total:     deploy.Statuses[len(deploy.Statuses)-1].Date.Sub(deploy.Statuses[0].Date),
+			deployData = append(deployData, DeployElement{
+				Deploy:         deploy,
+				Durations:      durations,
+				DurationsTotal: deploy.Statuses[len(deploy.Statuses)-1].Date.Sub(deploy.Statuses[0].Date).Nanoseconds()/int64(time.Millisecond),
 			})
 		}
 	}
 
-	revel.INFO.Println(dashboardData)
+	// Generate Data for the Dashboard.
+	dashboardData := make(map[string][]DeployElement)
+	for _, deployElement := range deployData {
+		dashboardData[deployElement.Deploy.Component] = append(dashboardData[deployElement.Deploy.Component], deployElement)
+	}
 
 	// Return 200 code and all deploy data.
 	revel.INFO.Println("Deploy and Status data successfully retrieved.")

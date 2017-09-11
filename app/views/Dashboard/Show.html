@@ -5,11 +5,211 @@
 <script src="https://code.highcharts.com/modules/drilldown.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+{{ range $component, $data := .dashboardData }}
+<div id="container-{{ $component }}" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+{{ end }}
 
 <script>
+Highcharts.createElement('link', {
+	href: 'https://fonts.googleapis.com/css?family=Signika:400,700',
+	rel: 'stylesheet',
+	type: 'text/css'
+}, null, document.getElementsByTagName('head')[0]);
+
+// Add the background image to the container
+Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
+	proceed.call(this);
+	this.container.style.background = 'url(http://www.highcharts.com/samples/graphics/sand.png)';
+});
+
+Highcharts.theme = {
+	colors: ['#f45b5b', '#8085e9', '#8d4654', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
+		'#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
+	chart: {
+		backgroundColor: null,
+		style: {
+			fontFamily: 'Signika, serif'
+		}
+	},
+	title: {
+		style: {
+			color: 'black',
+			fontSize: '16px',
+			fontWeight: 'bold'
+		}
+	},
+	subtitle: {
+		style: {
+			color: 'black'
+		}
+	},
+	tooltip: {
+		enabled: false,
+		borderWidth: 0
+	},
+	legend: {
+		itemStyle: {
+			fontWeight: 'bold',
+			fontSize: '13px'
+		}
+	},
+	xAxis: {
+		labels: {
+			style: {
+				color: '#6e6e70'
+			}
+		}
+	},
+	yAxis: {
+		labels: {
+			style: {
+				color: '#6e6e70'
+			}
+		}
+	},
+	plotOptions: {
+		series: {
+			shadow: true
+		},
+		candlestick: {
+			lineColor: '#404048'
+		},
+		map: {
+			shadow: false
+		}
+	},
+
+	// Highstock specific
+	navigator: {
+		xAxis: {
+			gridLineColor: '#D0D0D8'
+		}
+	},
+	rangeSelector: {
+		buttonTheme: {
+			fill: 'white',
+			stroke: '#C0C0C8',
+			'stroke-width': 1,
+			states: {
+				select: {
+					fill: '#D0D0D8'
+				}
+			}
+		}
+	},
+	scrollbar: {
+		trackBorderColor: '#C0C0C8'
+	},
+
+	// General
+	background2: '#E0E0E8'
+
+};
+
+// Apply the theme
+Highcharts.setOptions(Highcharts.theme);
+
 </script>
 
-{{.dashboardData}}
+
+<script>
+{{ range $component, $data := .dashboardData }}
+Highcharts.chart('container-{{ $component }}', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+	    text: 'Deploy Analysis for Component: {{ $component }}'
+    },
+    xAxis: {
+        categories: [
+	{{ range $index, $deployElement := $data }}
+	{{if $index}},{{end}}
+	'{{ $deployElement.Deploy.Version }}'
+	{{ end }}
+	]
+    },
+    yAxis: {
+        title: {
+            text: 'Deploy Time Consumption by Status'
+        },
+        stackLabels: {
+            enabled: false,
+            style: {
+                fontWeight: 'bold',
+                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+            }
+        },
+        type: 'datetime',
+        dateTimeLabelFormats: { // don't display the dummy year
+            month: '%e. %b',
+            year: '%b'
+        }
+    },
+    legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true,
+		format: "{series.name}",
+                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            }
+        }
+    },
+    series: [
+    {
+	name: "build",
+        data: [
+        {{ range $index, $deployElement := $data }}
+	{{if $index}},{{end}}
+       	{{ range $status, $duration := $deployElement.Durations }}
+	{{ if eq $status "build" }}{{ $duration }}{{ end }}
+	{{ end }}
+        {{ end }}
+	]
+    },
+    {
+	name: "test",
+        data: [
+        {{ range $index, $deployElement := $data }}
+	{{if $index}},{{end}}
+       	{{ range $status, $duration := $deployElement.Durations }}
+	{{ if eq $status "test" }}{{ $duration }}{{ end }}
+	{{ end }}
+        {{ end }}
+	]
+    },
+    {
+	name: "deliver",
+        data: [
+        {{ range $index, $deployElement := $data }}
+	{{if $index}},{{end}}
+       	{{ range $status, $duration := $deployElement.Durations }}
+	{{ if eq $status "deliver" }}{{ $duration }}{{ end }}
+	{{ end }}
+        {{ end }}
+	]
+    },
+    ]
+});
+
+{{ end }}
+
+</script>
 
 {{template "footer.html" .}}
