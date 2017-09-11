@@ -1,11 +1,12 @@
 package app
 
 import (
+	"os"
 	"time"
 
-	"github.com/revel/revel"
 	"github.com/jinzhu/gorm"
 	"github.com/rafaelbenvenuti/nymeria/app/models"
+	"github.com/revel/revel"
 )
 
 var (
@@ -51,7 +52,12 @@ func InitDatabase() {
 	var err error
 
 	driver := revel.Config.StringDefault("db.driver", "sqlite3")
-	uri := revel.BasePath + "/" + revel.Config.StringDefault("db.uri", "test.db" )
+	uri := revel.BasePath + "/" + revel.Config.StringDefault("db.uri", "test.db")
+
+	seedDatabase := false
+	if _, err := os.Stat(revel.BasePath + "/" + revel.Config.StringDefault("db.uri", "test.db")); os.IsNotExist(err) {
+		seedDatabase = true
+	}
 
 	revel.INFO.Println("Starting database connection...")
 
@@ -65,26 +71,125 @@ func InitDatabase() {
 	Database.LogMode(true)
 	Database.AutoMigrate(&models.Deploy{}, &models.Status{})
 
+	if seedDatabase {
+		SeedDatabase()
+	}
+
+}
+
+func SeedDatabase() {
 	seeds := []models.Deploy{
-	  models.Deploy {
+		models.Deploy{
 			Accountable: "dev-team-1",
-		  Component: "frontend",
-			Version: "v1.0.0",
-			Statuses: []models.Status {
-			  models.Status {
-			    Status: "starting",
-				  Date: time.Date(2017, time.September, 1, 12, 0, 0, 0, time.UTC),
-			  },
-			  models.Status {
-			    Status: "ending",
-				  Date: time.Date(2017, time.September, 1, 13, 0, 0, 0, time.UTC),
-			  },
-		  },
-	  },
+			Component:   "frontend",
+			Version:     "v1.0.0",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "start",
+					Date:   time.Date(2017, time.September, 1, 12, 0, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 1, 12, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 1, 12, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 1, 12, 30, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 1, 13, 0, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-1",
+			Component:   "frontend",
+			Version:     "v1.0.1",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "start",
+					Date:   time.Date(2017, time.September, 1, 18, 0, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 1, 18, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 1, 18, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 1, 18, 45, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 1, 19, 10, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-1",
+			Component:   "frontend",
+			Version:     "v1.0.2",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "start",
+					Date:   time.Date(2017, time.September, 2, 9, 0, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 2, 9, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 2, 9, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 2, 9, 50, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 2, 10, 20, 0, 0, time.Local),
+				},
+			},
+		},
+		models.Deploy{
+			Accountable: "dev-team-1",
+			Component:   "frontend",
+			Version:     "v1.0.3",
+			Statuses: []models.Status{
+				models.Status{
+					Status: "start",
+					Date:   time.Date(2017, time.September, 2, 13, 0, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "build",
+					Date:   time.Date(2017, time.September, 2, 13, 5, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "test",
+					Date:   time.Date(2017, time.September, 2, 13, 15, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "deliver",
+					Date:   time.Date(2017, time.September, 2, 13, 45, 0, 0, time.Local),
+				},
+				models.Status{
+					Status: "end",
+					Date:   time.Date(2017, time.September, 2, 14, 30, 0, 0, time.Local),
+				},
+			},
+		},
 	}
 
-  for _, seed := range seeds {
-	  Database.Create(&seed)
+	for _, seed := range seeds {
+		Database.Create(&seed)
 	}
-
 }
