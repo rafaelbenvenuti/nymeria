@@ -31,6 +31,7 @@ To help develop Nymeria, the following dependencies must be locally configured:
 * Revel Web Framework [Revel Web Framework](https://https://revel.github.io)
 * Sqlite3 [Sqlite3 Database](https://www.sqlite.org)
 * Docker [Docker Community Edition Documentation](https://docs.docker.com/engine/installation).
+* Highcharts [Highcharts Documentation](https://www.highcharts.com/docs).
 
 In order to facilitate Nymeria's development, a Builder's Dockerfile is included in this repository, so if don't want to manually configure all those requirements, you may just simply execute `docker build -f Build-Dockerfile -t nymeria-dev .` inside this repository directory to generate a Docker Container Image with all the dependencies included, with vim batteries.
 
