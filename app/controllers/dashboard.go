@@ -11,6 +11,7 @@ import (
 type DeployElement struct {
 	Deploy         models.Deploy
 	Durations      map[string]int64
+	Statuses       []string
 	DurationsTotal int64
 }
 
@@ -38,12 +39,19 @@ func (c Dashboard) Show() revel.Result {
 		if len(deploy.Statuses) > 1 {
 			durations := make(map[string]int64)
 			previousStatus := deploy.Statuses[0]
+			statusesMap := map[string]bool{}
+			statusesSlice := []string{}
 			for _, currentStatus := range deploy.Statuses[1:] {
+			        statusesMap[previousStatus.Status]= true
 				durations[previousStatus.Status] = currentStatus.Date.Sub(previousStatus.Date).Nanoseconds()/int64(time.Millisecond)
 				previousStatus = currentStatus
 			}
+			for status, _ := range statusesMap {
+					statusesSlice = append(statusesSlice, status)
+			}
 			deployData = append(deployData, DeployElement{
 				Deploy:         deploy,
+				Statuses:       statusesSlice,
 				Durations:      durations,
 				DurationsTotal: deploy.Statuses[len(deploy.Statuses)-1].Date.Sub(deploy.Statuses[0].Date).Nanoseconds()/int64(time.Millisecond),
 			})

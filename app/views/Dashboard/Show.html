@@ -1,4 +1,4 @@
-{{set . "title" "Home"}}
+{{set . "title" "Nymeria Dashboard"}}
 {{template "header.html" .}}
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -173,43 +173,27 @@ Highcharts.chart('container-{{ $component }}', {
         }
     },
     series: [
+
+    {{ $outerData := $data }}
+    {{ range $index, $status := (index $data 0).Statuses -}}
+    {{ if $index }},{{ end }}
     {
-	name: "build",
-        data: [
-        {{ range $index, $deployElement := $data }}
-	{{if $index}},{{end}}
-       	{{ range $status, $duration := $deployElement.Durations }}
-	{{ if eq $status "build" }}{{ $duration }}{{ end }}
-	{{ end }}
-        {{ end }}
-	]
-    },
-    {
-	name: "test",
-        data: [
-        {{ range $index, $deployElement := $data }}
-	{{if $index}},{{end}}
-       	{{ range $status, $duration := $deployElement.Durations }}
-	{{ if eq $status "test" }}{{ $duration }}{{ end }}
-	{{ end }}
-        {{ end }}
-	]
-    },
-    {
-	name: "deliver",
-        data: [
-        {{ range $index, $deployElement := $data }}
-	{{if $index}},{{end}}
-       	{{ range $status, $duration := $deployElement.Durations }}
-	{{ if eq $status "deliver" }}{{ $duration }}{{ end }}
-	{{ end }}
-        {{ end }}
-	]
-    },
+      name: "{{ $status }}",
+      data: [
+        {{ range $index, $deployElement := $outerData }}
+          {{ if $index }},{{ end }}
+       	  {{ index $deployElement.Durations $status }}
+	{{ end -}}
+      ]
+    }
+    {{ end -}}
+
     ]
 });
 
+
 {{ end }}
+
 
 </script>
 
