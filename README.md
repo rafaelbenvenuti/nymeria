@@ -8,7 +8,6 @@ Nymeria is an automatic and reliable deployment measure system, providing basic 
 
 Obviously, Nymeria is named after Arya Stark's direwolf in Game of Thrones. Although Nymeria has left Arya under unfortunate circunstances, this Nymeria is different, and it will prove itself as a valuable asset in environments where other references from GoT are necessary. Also, Nymeria is trustworthy and a great companion to your deployments.
 
-
 ## Screenshots
 
 ![Nymeria Dashboard](/examples/dashboard.png?raw=true "Nymeria Dashboard")
@@ -53,7 +52,7 @@ After that, a new Docker image will be available for you to push into any Docker
 The above version of the command creates a container with the name `nymeria`, which you can manage with docker's start, stop and rm commands.
 
 ## Usage
-Nymeria manage deploy data with the following structure:
+Nymeria manages deploy data with the following structure:
 ```
 '{ 
     "component": "nymeria", 
@@ -64,8 +63,23 @@ Nymeria manage deploy data with the following structure:
 
 ```
 
+After each API request, the deploy data is verified, ensuring data consistency. A new deploy is created if the data sent does not match any other deploy already existent. The deploy is unique when the Component, Version, and Accountable are unique. This allows a new deploy to occur for a component with a repeated version as long as the accountable is different. Also, after this validation, the status data is verified. This verification ensures that no status is overrided in the database, mainly because Nymeria is responsible for storing datetime information at each request. If the status already exists for that deploy in the database, Nymeria refuses to save the status data for that deploy.
+
 To create a new deploy:
-`curl -H 'Content-Type: application/json' -X POST -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "starting" }' http://localhost:9000/deploys`
+`curl -H 'Content-Type: application/json' -X POST -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "build" }' http://localhost:9000/deploys`
+
+Wait a little while and then send a new request with a different status:
+`curl -H 'Content-Type: application/json' -X POST -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "test" }' http://localhost:9000/deploys`
+
+Wait a little while again and then send a new request with a new status, different from the others:
+`curl -H 'Content-Type: application/json' -X POST -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "deliver" }' http://localhost:9000/deploys`
+
+Wait a little while again, be patient, and then send a new request with the end status:
+`curl -H 'Content-Type: application/json' -X POST -d '{ "component": "frontend", "version": "1.0.0", "accountable": "development-team", "status": "end" }' http://localhost:9000/deploys`
+
+Refresh Nymeria dashboard and you'll visualize your new deploy in it.
+
+You can also interact directly with the api, using the following commands:
 
 To list all deploys:
 `curl -H 'Content-Type: application/json' -X GET http://localhost:9000/deploys`
