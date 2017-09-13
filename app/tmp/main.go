@@ -72,7 +72,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					70: []string{ 
+					72: []string{ 
 						"dashboardData",
 					},
 				},

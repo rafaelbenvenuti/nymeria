@@ -1,10 +1,11 @@
 package controllers
 
 import (
-	"time"
 	"github.com/rafaelbenvenuti/nymeria/app"
 	"github.com/rafaelbenvenuti/nymeria/app/models"
 	"github.com/revel/revel"
+	"sort"
+	"time"
 )
 
 // Use this struct for deploy elements.
@@ -42,18 +43,19 @@ func (c Dashboard) Show() revel.Result {
 			statusesMap := map[string]bool{}
 			statusesSlice := []string{}
 			for _, currentStatus := range deploy.Statuses[1:] {
-			        statusesMap[previousStatus.Status]= true
-				durations[previousStatus.Status] = currentStatus.Date.Sub(previousStatus.Date).Nanoseconds()/int64(time.Millisecond)
+				statusesMap[previousStatus.Status] = true
+				durations[previousStatus.Status] = currentStatus.Date.Sub(previousStatus.Date).Nanoseconds() / int64(time.Millisecond)
 				previousStatus = currentStatus
 			}
 			for status, _ := range statusesMap {
-					statusesSlice = append(statusesSlice, status)
+				statusesSlice = append(statusesSlice, status)
 			}
+		        sort.Strings(statusesSlice)
 			deployData = append(deployData, DeployElement{
 				Deploy:         deploy,
 				Statuses:       statusesSlice,
 				Durations:      durations,
-				DurationsTotal: deploy.Statuses[len(deploy.Statuses)-1].Date.Sub(deploy.Statuses[0].Date).Nanoseconds()/int64(time.Millisecond),
+				DurationsTotal: deploy.Statuses[len(deploy.Statuses)-1].Date.Sub(deploy.Statuses[0].Date).Nanoseconds() / int64(time.Millisecond),
 			})
 		}
 	}
