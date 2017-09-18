@@ -104,12 +104,12 @@ func (c Deploys) Create() revel.Result {
 			response["data"] = deploy
 			return c.RenderJSON(response)
 		} else {
-		  revel.INFO.Println("Status created successfully.")
+			revel.INFO.Println("Status created successfully.")
 		}
 	}
 
 	// Return 201 if deploy was successfully created and associated with status.
-  revel.INFO.Println("Request to create new data completed successfully.")
+	revel.INFO.Println("Request to create new data completed successfully.")
 	c.Response.Status = 201
 	response["meta"] = Meta{ID: 10, Message: "data created successfully."}
 	response["data"] = deploy
@@ -125,10 +125,10 @@ func (c Deploys) List() revel.Result {
 	revel.INFO.Println("Request to list all Deploys and Statuses received.")
 
 	// Retrieve all Deploys and Statuses from database.
-  revel.INFO.Println("Trying to retrieve all Deploy and Status data from database.")
+	revel.INFO.Println("Trying to retrieve all Deploy and Status data from database.")
 	deploys := []models.Deploy{}
 	if app.Database.Preload("Statuses").Find(&deploys).Error != nil {
-    revel.ERROR.Println("Unable to retrieve data internally.")
+		revel.ERROR.Println("Unable to retrieve data internally.")
 		c.Response.Status = 500
 		response["meta"] = Meta{ID: 201, Message: "unable to retrieve data internally."}
 		response["data"] = nil
@@ -136,7 +136,7 @@ func (c Deploys) List() revel.Result {
 	}
 
 	// Return 200 code and all deploy data.
-  revel.INFO.Println("Deploy and Status data successfully retrieved.")
+	revel.INFO.Println("Deploy and Status data successfully retrieved.")
 	c.Response.Status = 200
 	response["meta"] = Meta{ID: 30, Message: "all data successfully retrieved."}
 	response["data"] = deploys
@@ -151,18 +151,18 @@ func (c Deploys) Show(id int) revel.Result {
 	revel.INFO.Println("Request to show Deploy and Statuses with Deploy ID: ", id, "received.")
 
 	// Try to retrieve the object in the database.
-  revel.INFO.Println("Retrieve Deploy and Status data for Deploy with ID: ", id)
+	revel.INFO.Println("Retrieve Deploy and Status data for Deploy with ID: ", id)
 	var deploy models.Deploy
 	if app.Database.Preload("Statuses").First(&deploy, id).Error != nil {
 		// Return a 404 if the record is not found.
 		if app.Database.Preload("Statuses").First(&deploy, id).RecordNotFound() {
-      revel.INFO.Println("Deploy record not found.")
+			revel.INFO.Println("Deploy record not found.")
 			c.Response.Status = 404
 			response["meta"] = Meta{ID: 400, Message: "record not found."}
 			response["data"] = nil
 			return c.RenderJSON(response)
 		} else {
-      revel.ERROR.Println("Unable to retrieve data internally.")
+			revel.ERROR.Println("Unable to retrieve data internally.")
 			c.Response.Status = 500
 			response["meta"] = Meta{ID: 201, Message: "unable to retrieve data internally."}
 			response["data"] = nil
@@ -171,7 +171,7 @@ func (c Deploys) Show(id int) revel.Result {
 	}
 
 	// Return 200 if the deploy was successfully retrieved.
-  revel.INFO.Println("Deploy and Status data successfully retrieved.")
+	revel.INFO.Println("Deploy and Status data successfully retrieved.")
 	c.Response.Status = 200
 	response["meta"] = Meta{ID: 20, Message: "data retrieved successfully."}
 	response["data"] = deploy
@@ -186,18 +186,18 @@ func (c Deploys) Delete(id int) revel.Result {
 	revel.INFO.Println("Request to delete Deploy and Statuses with Deploy ID: ", id, "received.")
 
 	// Try to retrieve the object in the database.
-  revel.INFO.Println("Retrieve Deploy and Status data for Deploy with ID: ", id)
+	revel.INFO.Println("Retrieve Deploy and Status data for Deploy with ID: ", id)
 	var deploy models.Deploy
 	if app.Database.Preload("Statuses").First(&deploy, id).Error != nil {
 		// Return a 404 if the record is not found.
 		if app.Database.Preload("Statuses").First(&deploy, id).RecordNotFound() {
-      revel.INFO.Println("Deploy record not found.")
+			revel.INFO.Println("Deploy record not found.")
 			c.Response.Status = 404
 			response["meta"] = Meta{ID: 400, Message: "record not found."}
 			response["data"] = nil
 			return c.RenderJSON(response)
 		} else {
-      revel.ERROR.Println("Unable to retrieve data internally.")
+			revel.ERROR.Println("Unable to retrieve data internally.")
 			c.Response.Status = 500
 			response["meta"] = Meta{ID: 201, Message: "unable to retrieve data internally."}
 			response["data"] = nil
@@ -206,9 +206,9 @@ func (c Deploys) Delete(id int) revel.Result {
 	}
 
 	// Record has been found, so we must remove the record.
-  revel.INFO.Println("Removing Deploy and Status data.")
+	revel.INFO.Println("Removing Deploy and Status data.")
 	if app.Database.Delete(&deploy).Error != nil {
-    revel.ERROR.Println("Unable to remove data internally.")
+		revel.ERROR.Println("Unable to remove data internally.")
 		c.Response.Status = 500
 		response["meta"] = Meta{ID: 203, Message: "unable to remove data internally."}
 		response["data"] = deploy
@@ -216,7 +216,7 @@ func (c Deploys) Delete(id int) revel.Result {
 	}
 
 	// Return 200 if the deploy was successfully retrieved.
-  revel.INFO.Println("Deploy and Status data successfully removed.")
+	revel.INFO.Println("Deploy and Status data successfully removed.")
 	c.Response.Status = 200
 	response["meta"] = Meta{ID: 21, Message: "data removed successfully."}
 	response["data"] = deploy
